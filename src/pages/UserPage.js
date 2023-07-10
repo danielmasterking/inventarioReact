@@ -3,6 +3,15 @@ import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 // @mui
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 import {
   Card,
   Table,
@@ -20,7 +29,8 @@ import {
   Typography,
   IconButton,
   TableContainer,
-  TablePagination,
+  TablePagination
+  
 } from '@mui/material';
 // components
 import Label from '../components/label';
@@ -31,14 +41,17 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 
+
+
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'name', label: 'Nombre', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'role', label: 'Rol', alignRight: false },
+  // { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'status', label: 'Estado', alignRight: false },
   { id: '' },
 ];
 
@@ -74,6 +87,9 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+
+  const [openModal, setOpenModal] = useState(false);
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -87,6 +103,9 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -146,19 +165,29 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+
+
+  const handleClickOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Usuarios </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Usuario
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
+          <Button onClick={handleClickOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            Nuevo Usuario
           </Button>
         </Stack>
 
@@ -179,7 +208,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, role, status, email, avatarUrl, isVerified } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -197,11 +226,11 @@ export default function UserPage() {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
 
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
@@ -289,6 +318,52 @@ export default function UserPage() {
           Delete
         </MenuItem>
       </Popover>
+
+      {/* modal dialog formulario de creacion */}
+      <div>
+        
+        <Dialog
+          fullScreen={fullScreen}
+          open={openModal}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {"Crear nuevo usuario"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+            <Box
+              component="form"
+              sx={{
+                '& > :not(style)': { m: 1, width: '25ch' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField id="user" label="Nombre de usuario" variant="outlined" />
+
+              <TextField id="email" label="Email" variant="outlined" />
+
+
+              <TextField id="pass" label="Contraseña" variant="outlined" />
+
+              <TextField id="repPass" label="Confirmar Contraseña" variant="outlined" />
+            
+            </Box>
+
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+              Cerrar
+            </Button>
+            <Button onClick={handleClose} autoFocus>
+              Guardar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </>
   );
 }
