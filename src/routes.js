@@ -28,11 +28,12 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+      index: true
     },
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/products" />, index: true },
+        { element: <Navigate to="/login" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

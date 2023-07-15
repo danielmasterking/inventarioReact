@@ -48,10 +48,10 @@ import USERLIST from '../_mock/products';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Nombre', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
-  { id: 'role', label: 'Rol', alignRight: false },
+  { id: 'descripcion', label: 'Descripcion', alignRight: false },
+  { id: 'precio', label: 'Precio', alignRight: false },
   // { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Estado', alignRight: false },
+  { id: 'cantidad', label: 'Cantidad', alignRight: false },
   { id: '' },
 ];
 
@@ -208,33 +208,36 @@ export default function ProductsPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, email, avatarUrl, isVerified } = row;
-                    const selectedUser = selected.indexOf(name) !== -1;
+                    const { id, nombre, descripcion, precio, cantidad } = row;
+                    const selectedUser = selected.indexOf(nombre) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, nombre)} />
                         </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {nombre}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{descripcion}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="left">{precio}</TableCell>
+
+
+                        <TableCell align="left">{cantidad}</TableCell>
 
                         {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
-                        <TableCell align="left">
+                        {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
@@ -329,7 +332,7 @@ export default function ProductsPage() {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            {"Crear nuevo usuario"}
+            {"Crear nuevo producto"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -341,14 +344,14 @@ export default function ProductsPage() {
               noValidate
               autoComplete="off"
             >
-              <TextField id="user" label="Nombre de usuario" variant="outlined" />
+              <TextField id="nombre" label="Nombre producto" variant="outlined" />
 
-              <TextField id="email" label="Email" variant="outlined" />
+              <TextField id="desc" label="Descripcion" variant="outlined" />
 
+              <TextField id="cantidad" label="Cantidad" variant="outlined" inputProps={{ inputMode: 'numeric' }} />
 
-              <TextField id="pass" label="Contraseña" variant="outlined" />
-
-              <TextField id="repPass" label="Confirmar Contraseña" variant="outlined" />
+              <TextField id="precio" label="Precio" variant="outlined" inputProps={{ inputMode: 'numeric' }} />
+              
             
             </Box>
 
