@@ -12,6 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import {
   Card,
   Table,
@@ -41,6 +42,16 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
 
+const rolesSelect = [
+  {
+    value: '1',
+    label: 'Admin',
+  },
+  {
+    value: '2',
+    label: 'User',
+  }
+];
 
 
 
@@ -333,25 +344,44 @@ export default function UserPage() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-            <Box
-              component="form"
-              sx={{
-                '& > :not(style)': { m: 1, width: '25ch' },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-              <TextField id="user" label="Nombre de usuario" variant="outlined" />
+              <Box sx={{ width: '100%' }}>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                  <Grid item xs={6}>
+                    <TextField id="user" label="Nombre de usuario" variant="outlined" />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField id="email" label="Email" variant="outlined" />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField id="pass" label="Contraseña" variant="outlined" />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField id="repPass" label="Confirmar Contraseña" variant="outlined" />
+                  </Grid>
 
-              <TextField id="email" label="Email" variant="outlined" />
-
-
-              <TextField id="pass" label="Contraseña" variant="outlined" />
-
-              <TextField id="repPass" label="Confirmar Contraseña" variant="outlined" />
-            
-            </Box>
-
+                  <Grid item xs={12}>
+                   
+                    <TextField
+                      id="standard-select-currency-native"
+                      select
+                      label="Roles"
+                      defaultValue="EUR"
+                      SelectProps={{
+                        native: true,
+                      }}
+                      helperText="Please select your currency"
+                      variant="standard"
+                    >
+                      {rolesSelect.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </TextField>
+                  </Grid>
+                   
+                </Grid>
+              </Box>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
